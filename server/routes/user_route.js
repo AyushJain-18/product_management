@@ -7,13 +7,13 @@ const {
 } = require('../controllers/userController');
 const { checkUserAuthMiddelware } = require('../middelware');
 
-// to Authenticate users
-router.post('/login', authenticateUser);
-
 // view users product.
 router.get('/view_product', checkUserAuthMiddelware, viewProductForUser);
 
-// users to create product
+// to Authenticate users
+router.post('/login', authenticateUser);
+
+//Regular user can create products for their own account which will be visible to admin.
 router.post(
   '/create_product',
   checkUserAuthMiddelware,
