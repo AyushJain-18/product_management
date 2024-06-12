@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const productRoutes = require('./routes/product_route');
 const userRoutes = require('./routes/user_route');
 const adminRoutes = require('./routes/admin_routes');
+const { checkAdminAuthMiddelware } = require('./middelware');
 
 let app = express();
 // Middleware
@@ -25,6 +26,6 @@ mongoose
 app.get('/heartbeat', (req, res) => res.send('Server working'));
 app.use('/api/product', productRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin', checkAdminAuthMiddelware, adminRoutes);
 
 app.listen(3000, () => console.log(`server is running on port 3000`));

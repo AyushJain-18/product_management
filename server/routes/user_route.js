@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const loginController = require('../controllers/loginController');
+const { authenticateUser } = require('../controllers/loginController');
 
 // to Authenticate users
-router.post('/login', loginController.authenticateUser);
-
-router.post('/register', loginController.registerUser);
+router.post('/login', authenticateUser);
 
 // users to create product
 router.post('/create_product');
