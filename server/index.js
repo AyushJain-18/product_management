@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
 const productRoutes = require('./routes/product_route');
 const userRoutes = require('./routes/user_route');
 const adminRoutes = require('./routes/admin_routes');
@@ -8,6 +9,10 @@ const { checkAdminAuthMiddelware } = require('./middelware');
 let app = express();
 // Middleware
 app.use(express.json());
+
+// serve static images.
+let imageFolderPath = path.join(__dirname, 'images');
+app.use('/images', express.static(imageFolderPath));
 
 // Database connection
 mongoose
