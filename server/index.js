@@ -1,12 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 const productRoutes = require('./routes/product_route');
 const userRoutes = require('./routes/user_route');
 const adminRoutes = require('./routes/admin_routes');
 const { checkAdminAuthMiddelware } = require('./middelware');
 
 let app = express();
+const corsOptions = {
+  origin: 'http://localhost:3000',
+};
+app.use(cors(corsOptions));
 // Middleware
 app.use(express.json());
 
@@ -33,4 +38,4 @@ app.use('/api/user', userRoutes);
 app.use('/api/product', checkAdminAuthMiddelware, productRoutes);
 app.use('/api/admin', checkAdminAuthMiddelware, adminRoutes);
 
-app.listen(3000, () => console.log(`server is running on port 3000`));
+app.listen(5000, () => console.log(`server is running on port 3000`));
