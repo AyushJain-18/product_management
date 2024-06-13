@@ -29,8 +29,8 @@ mongoose
 
 // routes
 app.get('/heartbeat', (req, res) => res.send('Server working'));
-app.use('/api/product', productRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/product', checkAdminAuthMiddelware, productRoutes);
 app.use('/api/admin', checkAdminAuthMiddelware, adminRoutes);
 
 app.listen(3000, () => console.log(`server is running on port 3000`));
