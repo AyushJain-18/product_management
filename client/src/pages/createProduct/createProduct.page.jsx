@@ -202,9 +202,9 @@ const  CreateProductPage =()=>{
             <Custumbutton type='submit' >Submit</Custumbutton>
           </Grid>
 
-          <Grid item xs={12} md = {4}>
+          {loggedInUserRole === 'ADMIN' && <Grid item xs={12} md = {4}>
             <Custumbutton onClick = {handleDeleteProduct} style={{backgroundColor : 'rgb(243, 98, 98)'}} >Delete Product</Custumbutton>
-          </Grid>
+          </Grid>}
 
           <Grid item xs={12} md = {4}>
           {success && <div style={{color: 'green',fontSize: "larger",fontWeight: "bold",margin: '10px auto', width: 'fit-content', fontFamily: 'Open Sans Condensed'}}>{success}</div>}
