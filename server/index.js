@@ -38,4 +38,4 @@ app.use('/api/user', userRoutes);
 app.use('/api/product', checkAdminAuthMiddelware, productRoutes);
 app.use('/api/admin', checkAdminAuthMiddelware, adminRoutes);
 
-app.listen(5000, () => console.log(`server is running on port 3000`));
+app.listen(5000, () => console.log(`server is running on port 5000`));
