@@ -7,7 +7,27 @@ const bcrypt = require('bcrypt');
 
 let getAllProducts = async (req, res) => {
   try {
-    let allProducts = await Products.find({});
+    const allProducts = await Products.aggregate([
+      {
+        $lookup: {
+          from: 'users', // The collection to join
+          localField: 'assigned_users.user_id', // The field from the input documents
+          foreignField: '_id', // The field from the documents of the "from" collection
+          as: 'assigned_users', // The name of the new array field to add to the input documents
+        }
+      },{
+        $project: {
+          name: 1,
+          SKU: 1,
+          price: 1,
+          description: 1,
+          category: 1,
+          image: 1,
+          assigned_users: { username: 1 },
+        },
+      }
+    ]);
+    console.log('AYush', allProducts)
     return res.status(200).json({ products: allProducts });
   } catch (error) {
     res.status(500).json({ message: error.message });
