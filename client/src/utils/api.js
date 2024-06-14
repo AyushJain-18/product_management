@@ -31,7 +31,10 @@ const makeCall = async (
     console.log('Options are', options);
     let response = await fetch(`${serverUrl}/api${endpoint}`, options);
     if (!response.ok) {
-      throw new Error(`HTTP error! status is ${response.status}`);
+      throw new Error({
+        status: response.status,
+        message: `HTTP error! status is ${response.status}`,
+      });
     }
     let data = await response.json();
     return data;
@@ -52,6 +55,9 @@ export const getAllProductForUser = async (userToken) =>
 export const getAllProduct = async (adminToken) =>
   await makeCall('/admin/product', 'GET', null, adminToken);
 
+// to get all admin and non admin users
+export const getAllAdminAndNonAdminUsers = async (adminToken) =>
+  await makeCall('/admin/all_users_admin_non_admin', 'GET', null, adminToken);
 // only admin can get all users
 export const getAllUsers = async (adminToken) =>
   await makeCall('/admin/all_users', 'GET', null, adminToken);
@@ -80,7 +86,7 @@ export const createNewProductByUser = async (
   );
 
 // only admin user can use this to craete product and assign to users
-export const createProductByAdmin = async (
+export const createNewProductByAdmin = async (
   name,
   price,
   category,

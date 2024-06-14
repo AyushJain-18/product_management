@@ -8,6 +8,7 @@ import Header from './component/header/header.component';
 import Homepage from './pages/home/home.Page';
 import CreateProductPage from './pages/createProduct/createProduct.page';
 import PrivateRoute from './component/privaeRoute/privateRoute';
+import CreateUser from './pages/createUser/createUser.page';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +39,7 @@ function App() {
             <Route path="/" element={<PrivateRoute />}>
               <Route path="/" element={<Homepage />} />
               <Route path="/create-product" element={<CreateProductPage />} />
-              <Route path="/create-user" element={<h2>Create user</h2>} />
+              <Route path="/create-user" element={<CreateUser />} />
               <Route path="/product:id" element={<h2>Edit product </h2>} />
             </Route>
           </Routes>

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box,
-  AppBar,
-  Toolbar,
   IconButton,
   Typography,
-  Button,
   TextField,
   Grid,
   Card,
@@ -16,7 +13,6 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import useAppContext from '../../hooks/useAppcontext';
 import { useNavigate } from 'react-router-dom';
@@ -25,48 +21,7 @@ import {
   getAllProductForUser,
   serverUrl,
 } from '../../utils/api';
-
-const products2 = [
-  {
-    _id: 1,
-    name: 'First Product Updated',
-    SKU: '1718202466122_FIRS_FIRS_COLL',
-    price: 1000,
-    description: 'A short description about product',
-    category: 'Category 1',
-    image: `shoe2.jpg`,
-    assassigned_users: [],
-  },
-  {
-    _id: 1,
-    name: 'First Product Updated',
-    SKU: '1718202466122_FIRS_FIRS_COLL',
-    price: 1000,
-    description: 'A short description about product',
-    category: 'Shoes',
-    image: `shoe1.jpg`,
-  },
-  {
-    _id: 1,
-    name: 'First Product Updated',
-    SKU: '1718202466122_FIRS_FIRS_COLL',
-    price: 1000,
-    description: 'A short description about product',
-    category: 'Category 1',
-    image: 'goggle.jpg',
-  },
-  {
-    _id: 1,
-    name: 'First Product Updated',
-    SKU: '1718202466122_FIRS_FIRS_COLL',
-    price: 1000,
-    description: 'A short description about product',
-    category: 'Category 1',
-    image: `shoe2.jpg`,
-    image: 'headphone.jpg',
-  },
-  // Add more products as needed
-];
+import capitalizeWords from '../../utils/capitalizeWord'
 
 const Homepage = () => {
   const { loggedInUserRole, token } = useAppContext();
@@ -89,7 +44,7 @@ const Homepage = () => {
   const filteredProducts = product.filter(
     (product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedCategory === '' || product.category === selectedCategory)
+      (selectedCategory === '' || product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
   );
 
   const getProducts = async () => {
@@ -102,11 +57,16 @@ const Homepage = () => {
         resp = await getAllProductForUser(token);
       }
       if (resp?.products) {
-        let allCategory = resp?.products.map((ele) => ele.category);
-        setCategory(allCategory);
+        let allCategory = [];
+         resp?.products.forEach((ele) => {
+          if(!allCategory.some(category => category.toLocaleLowerCase()=== ele.category.toLocaleLowerCase())){
+            allCategory.push(ele.category)
+          }
+        });
+         setCategory(allCategory);
       }
-      setProduct(products2);
-      //setProduct(resp?.products);
+      //setProduct(products2);
+      setProduct(resp?.products);
     } catch (error) {}
   };
   useEffect(() => {
@@ -164,7 +124,7 @@ const Homepage = () => {
             />
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                {product.name}
+                {capitalizeWords(product.name) }
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
                 {product.description}

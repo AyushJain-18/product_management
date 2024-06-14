@@ -5,13 +5,17 @@ const {
   getAllProducts,
   createUser,
   createProduct,
+  getAllNonAdminUsers,
   getAllUsers,
 } = require('../controllers/adminController');
 
 // /api/admin
 
+// all admin + non admin users
+router.get('/all_users_admin_non_admin', getAllUsers);
+
 // get all users
-router.get('/all_users', getAllUsers);
+router.get('/all_users', getAllNonAdminUsers);
 //New user creation will be done from the Admin Account.(No requiremen to edit or delete users.)
 router.post('/create_user', createUser);
 

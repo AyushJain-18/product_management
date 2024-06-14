@@ -1,5 +1,5 @@
 const { ADMIN, NON_ADMIN } = require('../keys');
-const { generateJWTToken } = require('../utils');
+const { generateJWTToken, getImageLocation, generateSKU } = require('../utils');
 const Products = require('../model/products.model');
 const Users = require('../model/users.model');
 
@@ -77,9 +77,18 @@ let createUser = async (req, res) => {
   }
 };
 
-let getAllUsers = async (req, res) => {
+let getAllNonAdminUsers = async (req, res) => {
   try {
     let users = await Users.find({ role: NON_ADMIN }, { username: 1, _id: 1 });
+    return res.status(200).json({ users: users });
+  } catch (error) {
+    console.log('Error occured', error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+let getAllUsers = async (req, res) => {
+  try {
+    let users = await Users.find({}, { username: 1, _id: 1 });
     return res.status(200).json({ users: users });
   } catch (error) {
     console.log('Error occured', error);
@@ -90,5 +99,6 @@ module.exports = {
   getAllProducts,
   createUser,
   createProduct,
+  getAllNonAdminUsers,
   getAllUsers,
 };
