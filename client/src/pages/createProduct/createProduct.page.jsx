@@ -14,13 +14,14 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import useAppContext from "../../hooks/useAppcontext";
-import { createNewProductByAdmin, createNewProductByUser, getAllUsers, modifyProduct  } from "../../utils/api";
+import { createNewProductByAdmin, createNewProductByUser, getAllUsers, modifyProduct , deleteProductAdmin } from "../../utils/api";
 import Custumbutton from '../../component/custumComponents/CustumButon/custumButton.component'
-import {useLocation } from 'react-router-dom';
+import {useLocation, useNavigate } from 'react-router-dom';
 
 
 const  CreateProductPage =()=>{
   const location = useLocation();
+  let navigate = useNavigate();
   let productData = location?.state?.data;
   let defaultProductDetails = productData? productData : {name: "", price: "", category: "",description:"", assigned_users:[] }
   const {setIsLoading, token,loggedInUserRole,} =useAppContext();
@@ -29,10 +30,23 @@ const  CreateProductPage =()=>{
   const [allUsers, setAllUsers] = useState([]);
   const [success, setSuccess] = useState(null)
 
+  const handleDeleteProduct = async(event) => {
+    event.preventDefault();
+    console.log('DElete function called')
+    try{
+      setIsLoading(true);
+      await deleteProductAdmin(productDetails._id, token);
+      setIsLoading(false);
+      navigate('/')
+    }catch(error){
+      console.log('Error occured', error)
+      setIsLoading(false)
+    }
+  }
   
   const handleSubmit= async (event)=>{
-    setSuccess(null)
     event.preventDefault();
+    setSuccess(null)
     const {name, price, category, description, assigned_users, _id} =productDetails;
     let data = null;
     setIsLoading(true)
@@ -183,12 +197,18 @@ const  CreateProductPage =()=>{
           <Grid item xs={12} md = {4}>
               <Custumbutton type='reset' onClick= {() => {setProductDetails(defaultProductDetails); setSuccess(null)}} >cancel</Custumbutton>
           </Grid>
+     
+          <Grid item xs={12} md = {4}>
+            <Custumbutton type='submit' >Submit</Custumbutton>
+          </Grid>
+
+          <Grid item xs={12} md = {4}>
+            <Custumbutton onClick = {handleDeleteProduct} style={{backgroundColor : 'rgb(243, 98, 98)'}} >Delete Product</Custumbutton>
+          </Grid>
+
           <Grid item xs={12} md = {4}>
           {success && <div style={{color: 'green',fontSize: "larger",fontWeight: "bold",margin: '10px auto', width: 'fit-content', fontFamily: 'Open Sans Condensed'}}>{success}</div>}
           {error && <div style={{color: 'rgb(243, 98, 98)',fontSize: "larger",fontWeight: "bold",margin: '10px auto',fontFamily: 'Open Sans Condensed', width: 'fit-content'}}>{error}</div>}
-          </Grid>
-          <Grid item xs={12} md = {4}>
-            <Custumbutton type='submit' >Submit</Custumbutton>
           </Grid>
         </Grid>
       </form>

@@ -4,10 +4,14 @@ const mongoose = require('mongoose');
 let deleteProduct = async (req, res) => {
   const { productId } = req.params;
   if (!productId) {
-    return res.send(400).json({ message: 'Product information is missing' });
+    return res.status(400).json({ message: 'Product information is missing' });
   }
-  await Products.findByIdAndDelete(productId);
-  return res.send().json({ message: 'Product deleted' });
+  try {
+    await Products.findByIdAndDelete(productId);
+    return res.status(200).json({ message: 'Product deleted' });
+  } catch (error) {
+    console.log('Error while deleting product');
+  }
 };
 
 let modifyProduct = async (req, res) => {
