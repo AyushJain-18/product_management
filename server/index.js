@@ -6,6 +6,10 @@ const productRoutes = require('./routes/product_route');
 const userRoutes = require('./routes/user_route');
 const adminRoutes = require('./routes/admin_routes');
 const { checkAdminAuthMiddelware } = require('./middelware');
+const {
+  deleteData,
+  createDummyData,
+} = require('./controllers/dummyDataController');
 
 let app = express();
 const corsOptions = {
@@ -25,8 +29,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
+  .then(async () => {
     console.log('Connected to MongoDB');
+    await deleteData();
+    await createDummyData();
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB', err);

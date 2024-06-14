@@ -6,7 +6,7 @@ const { SECRET_KEY } = require('./keys');
 
 let generateJWTToken = (user) => {
   let token = jwt.sign({ userId: user._id, role: user.role }, SECRET_KEY, {
-    expiresIn: '1hr',
+    expiresIn: '5hr',
   });
   return token;
 };

@@ -1,28 +1,41 @@
-Server folder conatins backend code, which is been developed on Express and DB used in mongoDB.
-Client contains frontend code, which is been developed in react
+const Products = require('../model/products.model');
+const Users = require('../model/users.model');
+const { ADMIN, NON_ADMIN, SECRET_KEY } = require('../keys');
+const bcrypt = require('bcrypt');
 
-# To start server. (In first terminal)
+let generateHashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);
+  return hashPassword;
+};
 
-cd .\server\
-npm start
+const deleteData = async () => {
+  try {
+    await Products.deleteMany({});
+    await Users.deleteMany({});
+    console.log('Data is deleted');
+  } catch (error) {
+    console.log('Error while deleting data');
+  }
+};
+// Function to create and add dummy data
+const createDummyData = async () => {
+  try {
+    // Create users
+    let hashPassword = await generateHashPassword('pass');
+    const users = [
+      { username: 'admin', password: hashPassword, role: ADMIN },
+      { username: 'John', password: hashPassword, role: NON_ADMIN },
+      { username: 'Robin', password: hashPassword, role: NON_ADMIN },
+    ];
 
-# To start client (In second Terminal)
+    const createdUsers = await Users.insertMany(users);
+    const nonAdminUsers = createdUsers.filter(
+      (user) => user.role === NON_ADMIN
+    );
 
-cd .\client\
-npm start
-
-note:- As soon as you start the server some dummy data will be created on your local db.
-
-pasted users and product data.
-username and pass is what we require to login to website
-
-const users = [
-{ username: 'admin', password: 'pass, role: ADMIN },
-{ username: 'John', password: 'pass, role: NON_ADMIN },
-{ username: 'Robin', password: 'pass, role: NON_ADMIN },
-];
-
-      const products = [
+    // Create products
+    const products = [
       {
         name: 'Shoe AB',
         SKU: 'SKU001',
@@ -124,3 +137,14 @@ const users = [
         assigned_users: [{ user_id: nonAdminUsers[1]._id }],
       },
     ];
+
+    await Products.insertMany(products);
+    console.log('Dummy data created successfully!');
+  } catch (error) {
+    console.error('Error creating dummy data:', error);
+  }
+};
+module.exports = {
+  deleteData,
+  createDummyData,
+};
