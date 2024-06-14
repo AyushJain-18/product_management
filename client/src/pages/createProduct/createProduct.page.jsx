@@ -1,18 +1,15 @@
 import React ,{useState} from "react";
-import "./sign-in.comonent.scss"
+import "./createProduct.page.scss"
 
-
-import FormInput from "../custumComponents/form-input/form-input.component"
-import CustumButton from "../custumComponents/CustumButon/custumButton.component"
-import { loginUser } from "../../utils/api";
+import FormInput from "../../component/custumComponents/form-input/form-input.component";
+import CustumButton from "../../component/custumComponents/CustumButon/custumButton.component"
 import useAppContext from "../../hooks/useAppcontext";
-import { useNavigate } from "react-router-dom";
 
-const  SingInComponent =()=>{
+
+const  CreateProductPage =()=>{
   const [userCrendetial, setUserCredebtials, ]= useState({userName: "", password: ""});
   const [error, setError] = useState(false)
   const {setIsLoading, setToken, setLoggedInUserRole} =useAppContext();
-  const naviagate = useNavigate()
   
   const handleSubmit= async (event)=>{
     event.preventDefault();
@@ -20,12 +17,11 @@ const  SingInComponent =()=>{
     let data = null;
     setIsLoading(true)
     try{
-       data = await loginUser(userName, password);
+       data = // await loginUser(userName, password);
        setToken(data?.token)
        setLoggedInUserRole(data?.role)
        setIsLoading(false)
        setError(false)
-       naviagate('/')
     }catch(error){
       console.log('Error while login', error.message)
       setError(true)
@@ -39,10 +35,10 @@ const  SingInComponent =()=>{
   }
 
   return(
-    <div className ="sign-in">
-      <h2 className = "title">WANNA LOGIN IN!</h2>
+    <div className ="create-product">
+      <h2 className = "title">CREATE PRODUCT !</h2>
       <div className ='subtitle'>
-        <div> LOGIN here</div> 
+        <div>Use below form to create new product</div> 
       </div>
       <form onSubmit={handleSubmit}> 
 
@@ -61,7 +57,7 @@ const  SingInComponent =()=>{
           value={userCrendetial.password} 
           required
           handleChange ={handleOnchnage}/>
-         {error && <div className="wrongCredentials">Wrong Credentials</div>}
+         {error && <div className="error">Wrong Credentials</div>}
         <div className ="button-wrap">
           <CustumButton   type ="submit">Sign In </CustumButton>
         </div>
@@ -73,4 +69,4 @@ const  SingInComponent =()=>{
 }
 
   
-export default SingInComponent ;
+export default CreateProductPage ;

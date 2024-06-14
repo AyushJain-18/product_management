@@ -1,0 +1,35 @@
+.create-product{
+    display: flex;
+    flex-direction: column;
+    .title{
+        align-self:flex-start;
+        margin-top: 3vw;
+    }
+    .subtitle{
+        display: flex;
+        margin: 0vw 2vw;
+        
+        .or{
+            padding: 0vw 1vw
+        }
+        .signup{
+            width: inherit;
+            align-self: center;
+            cursor: pointer;
+            color: #4285f4
+        }
+    }
+    .error{
+        color: rgb(243, 98, 98);
+        font-size: larger;
+        font-weight: bold;
+    }
+
+    .button-wrap{
+            width: inherit;
+            display: flex;
+            flex-direction: column;
+            align-content: space-between;
+  
+    }
+}
