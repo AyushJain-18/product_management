@@ -13,8 +13,7 @@ let deleteProduct = async (req, res) => {
 let modifyProduct = async (req, res) => {
   try {
     const { productId } = req.params;
-    const { name, price, description, category, add_users, remove_users } =
-      req.body;
+    const { name, price, description, category, assigned_users } = req.body;
 
     const product = await Products.findById(productId);
     if (!product) {
@@ -26,28 +25,29 @@ let modifyProduct = async (req, res) => {
     if (price) product.price = price;
     if (category) product.category = category;
     if (description) product.description = description;
+    if (assigned_users) product.assigned_users = assigned_users;
 
-    // Add users to the assigned_users array
-    if (add_users) {
-      add_users.forEach((userId) => {
-        // condition to check if user is already added to that product
-        let isUserIdInProduct = product.assigned_users.some(
-          (user) => user.user_id.toString() === userId
-        );
-        if (!isUserIdInProduct) {
-          product.assigned_users.push({
-            user_id: new mongoose.Types.ObjectId(userId),
-          });
-        }
-      });
-    }
+    // // Add users to the assigned_users array
+    // if (add_users) {
+    //   add_users.forEach((userId) => {
+    //     // condition to check if user is already added to that product
+    //     let isUserIdInProduct = product.assigned_users.some(
+    //       (user) => user.user_id.toString() === userId
+    //     );
+    //     if (!isUserIdInProduct) {
+    //       product.assigned_users.push({
+    //         user_id: new mongoose.Types.ObjectId(userId),
+    //       });
+    //     }
+    //   });
+    // }
 
-    // Remove users from the assigned_users array
-    if (remove_users) {
-      product.assigned_users = product.assigned_users.filter(
-        (user) => !remove_users.includes(user.user_id.toString())
-      );
-    }
+    // // Remove users from the assigned_users array
+    // if (remove_users) {
+    //   product.assigned_users = product.assigned_users.filter(
+    //     (user) => !remove_users.includes(user.user_id.toString())
+    //   );
+    // }
     await product.save();
     res.status(200).json(product);
   } catch (error) {

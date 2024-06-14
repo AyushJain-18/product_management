@@ -14,13 +14,15 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import useAppContext from "../../hooks/useAppcontext";
-import { createNewProductByAdmin, createNewProductByUser, getAllUsers } from "../../utils/api";
+import { createNewProductByAdmin, createNewProductByUser, getAllUsers, modifyProduct  } from "../../utils/api";
 import Custumbutton from '../../component/custumComponents/CustumButon/custumButton.component'
-
+import {useLocation } from 'react-router-dom';
 
 
 const  CreateProductPage =()=>{
-  let defaultProductDetails = {name: "", price: "", category: "",description:"", users:[] }
+  const location = useLocation();
+  let productData = location?.state?.data;
+  let defaultProductDetails = productData? productData : {name: "", price: "", category: "",description:"", assigned_users:[] }
   const {setIsLoading, token,loggedInUserRole,} =useAppContext();
   const [productDetails, setProductDetails ]= useState(defaultProductDetails);
   const [error, setError] = useState(null)
@@ -31,12 +33,15 @@ const  CreateProductPage =()=>{
   const handleSubmit= async (event)=>{
     setSuccess(null)
     event.preventDefault();
-    const {name, price, category, description,users} =productDetails;
+    const {name, price, category, description, assigned_users, _id} =productDetails;
     let data = null;
     setIsLoading(true)
     try{
-      if(loggedInUserRole === 'ADMIN'){
-        data =  await createNewProductByAdmin(name, price, category, description,users, token);
+      if(loggedInUserRole === 'ADMIN' && location.pathname === '/create-product'){
+        data =  await createNewProductByAdmin(name, price, category, description,assigned_users, token);
+      }
+      if(loggedInUserRole === 'ADMIN' && location.pathname === '/product/edit'){
+        data =  await modifyProduct(_id,token, name, price, category, description,assigned_users);
       }
       if(loggedInUserRole === 'USER') {
         data = await createNewProductByUser(name, price, category, description,token);
@@ -60,12 +65,18 @@ const  CreateProductPage =()=>{
 
   const handleUsersChange = (event) => {
     const { value } = event.target;
+    const idCount = value.reduce((acc, item) => {
+      acc[item._id] = (acc[item._id] || 0) + 1;
+      return acc;
+  }, {});
+
+  // Filter out items with more than one occurrence
+   let uniqueValue =  value.filter(item => idCount[item._id] === 1);
     setProductDetails((prevValues) => ({
       ...prevValues,
-      users: [...value]
+      assigned_users: [...uniqueValue]
     }));
   };
-
 
   useEffect( () => {
     (async function(){
@@ -83,7 +94,12 @@ const  CreateProductPage =()=>{
       
       }
     })()
-  }, [loggedInUserRole])
+  }, [])
+
+  useEffect(() => {
+    let defaultProductDetails = productData? productData : {name: "", price: "", category: "",description:"", assigned_users:[] };
+    setProductDetails(defaultProductDetails);
+  }, [location.pathname, productData])
 
 
   return (
@@ -129,21 +145,24 @@ const  CreateProductPage =()=>{
           </Grid>
           { loggedInUserRole === 'ADMIN' && <Grid item xs={12}>
             <FormControl variant="outlined" fullWidth>
-              <InputLabel>Users</InputLabel>
+              <InputLabel>assigned_users</InputLabel>
               <Select
-                name="users"
+                name="assigned_users"
                 multiple
-                value={productDetails.users}
+                value={productDetails.assigned_users}
                 onChange={handleUsersChange}
-                input={<OutlinedInput label="Users" />}
-                renderValue={(selected) => selected.map(user => allUsers.find(u => u._id === user._id).username).join(', ')}
+                input={<OutlinedInput label="assigned_users" />}
+                renderValue={(selected) =>  {
+                  return selected.map(user => allUsers?.find(u => u.username === user.username)?.username).join(', ')
+                }}
               >
-                {allUsers.map((user) => (
+                {allUsers.map((user) => {
+                   return(
                   <MenuItem key={user._id} value={user}>
-                    <Checkbox checked={productDetails?.users.some(u => u._id === user._id)} />
+                    <Checkbox checked={productDetails?.assigned_users.some(u => u.username === user.username)} />
                     <ListItemText primary={user.username} />
                   </MenuItem>
-                ))}
+                )})}
               </Select>
             </FormControl>
           </Grid>}

@@ -28,7 +28,6 @@ const makeCall = async (
     if (method === ('POST' || 'PUT') && body) {
       options.body = JSON.stringify(body);
     }
-    console.log('Options are', options);
     let response = await fetch(`${serverUrl}/api${endpoint}`, options);
     if (!response.ok) {
       throw new Error({
@@ -121,26 +120,11 @@ export const modifyProduct = async (
   price,
   category,
   description,
-  add_users,
-  remove_users
+  assigned_users
 ) =>
   await makeCall(
     `/product/${productId}`,
     'PUT',
-    { name, price, category, description, add_users, remove_users },
+    { name, price, category, description, assigned_users },
     adminToken
   );
-
-// let token2 = '';
-// modifyProduct('6669b062011dc421b71f95db', token2, {
-//   name: 'First Product Updated',
-//   price: 1000,
-//   description: 'Shoes for you',
-//   category: 'Shoes',
-//   add_users: [],
-//   remove_users: [],
-// });
-
-// rashi:- 6669db9126c74035fb0a1c19
-// ayush:- 6668a7afc5d6057976aa76a9
-// rishabh:- 6668aa6e5f5a974b702c44f8

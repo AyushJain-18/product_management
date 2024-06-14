@@ -39,7 +39,7 @@ const Homepage = () => {
     setSelectedCategory(event.target.value);
   };
 
-  const onProductClick = (productId) => navigate(`product/${productId}`);
+  const onProductClick = (data) => navigate(`product/edit`, { state: { data }});
 
   const filteredProducts = product.filter(
     (product) =>
@@ -112,7 +112,7 @@ const Homepage = () => {
       {filteredProducts.map((product) => (
         <Grid item key={product._id} xs={12} sm={6} md={4}>
           <Card
-            onClick={() => onProductClick(product._id)}
+            onClick={() => onProductClick(product)}
             sx={{ cursor: 'pointer', height: '100%' }}
           >
             <CardMedia
