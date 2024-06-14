@@ -142,7 +142,7 @@ const Homepage = () => {
                 <Typography variant="body2" color="text.secondary">
                   <strong>Assigned Users:</strong>
                   {product?.assigned_users?.length > 0
-                    ? product.assigned_users.join(', ')
+                    ? product.assigned_users.reduce((acc, ele, index) => acc= `${acc}  ${index+1}.${ele.username}`, '')
                     : ' None'}
                 </Typography>
               )}
