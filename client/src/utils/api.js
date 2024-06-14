@@ -25,7 +25,7 @@ const makeCall = async (
       method: method,
       headers: headers,
     };
-    if (method === ('POST' || 'PUT') && body) {
+    if ((method === 'POST' || method === 'PUT') && body) {
       options.body = JSON.stringify(body);
     }
     let response = await fetch(`${serverUrl}/api${endpoint}`, options);

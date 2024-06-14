@@ -46,7 +46,7 @@ const  CreateProductPage =()=>{
       if(loggedInUserRole === 'USER') {
         data = await createNewProductByUser(name, price, category, description,token);
       }
-      setProductDetails(defaultProductDetails)
+      // setProductDetails(defaultProductDetails)
       setSuccess('Prodcut is created')
       setIsLoading(false)
       setError(null)
