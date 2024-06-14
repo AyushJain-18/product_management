@@ -28,7 +28,6 @@ const getUserValueFromToken = (req, res) => {
       return res.status(401).json({ message: 'Access denied' });
     }
     const userValue = jwt.verify(token, SECRET_KEY);
-    console.log('userValue', userValue);
     return userValue;
   } catch (error) {
     console.log('Error occured in auth middelware', error);

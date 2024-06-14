@@ -8,7 +8,6 @@ let authenticateUser = async (req, res) => {
   let { userName, password } = req.body;
   try {
     let user = await Users.findOne({ username: userName });
-    console.log('ayush', password, user?.password);
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
