@@ -3,18 +3,35 @@ import "./sign-in.comonent.scss"
 
 import FormInput from "../custumComponents/form-input/form-input.component"
 import CustumButton from "../custumComponents/CustumButon/custumButton.component"
+import { loginUser } from "../../utils/api";
+import useAppContext from "../../hooks/useAppcontext";
+
+
 
 
 
 const  SingInComponent =()=>{
-
-  const [userCrendetial, setUserCredebtials]= useState({userName: "", password: ""});
-
-  const handleSubmit=(event)=>{
+  const [userCrendetial, setUserCredebtials, ]= useState({userName: "", password: ""});
+  const [error, setError] = useState(false)
+  const {setIsLoading, setToken, setLoggedInUserRole} =useAppContext();
+  
+  const handleSubmit= async (event)=>{
     event.preventDefault();
-    const {userName, password} =userCrendetial
-    console.log(userName, password)
-    // emailLoginStart(email, password)
+    const {userName, password} =userCrendetial;
+    let data = null;
+    setIsLoading(true)
+    try{
+       data = await loginUser(userName, password);
+       setToken(data?.token)
+       setLoggedInUserRole(data?.role)
+       setIsLoading(false)
+       setError(false)
+    }catch(error){
+      console.log('Error while login', error.message)
+      setError(true)
+      setIsLoading(false)
+    }
+  
   }
   const handleOnchnage=(event)=>{
     const{name,value} = event.target;
@@ -44,10 +61,11 @@ const  SingInComponent =()=>{
           value={userCrendetial.password} 
           required
           handleChange ={handleOnchnage}/>
-
+         {error && <div className="wrongCredentials">Wrong Credentials</div>}
         <div className ="button-wrap">
           <CustumButton   type ="submit">Sign In </CustumButton>
         </div>
+       
       </form> 
     </div>
   );

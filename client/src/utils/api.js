@@ -1,4 +1,4 @@
-let serverUrl = 'http://localhost:5000';
+export const serverUrl = 'http://localhost:5000';
 
 export const getImage = (imageName) => `${serverUrl}/images/${imageName}`;
 
@@ -28,10 +28,8 @@ const makeCall = async (
     if (method === ('POST' || 'PUT') && body) {
       options.body = JSON.stringify(body);
     }
-    let response = await fetch(
-      `http://localhost:3000/api/${endpoint}`,
-      options
-    );
+    console.log('Options are', options);
+    let response = await fetch(`${serverUrl}/api${endpoint}`, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status is ${response.status}`);
     }
@@ -42,6 +40,7 @@ const makeCall = async (
       `Error occured while making call to ${endpoint}`,
       error.message
     );
+    throw new Error(`HTTP error! status is ${error.message}`);
   }
 };
 

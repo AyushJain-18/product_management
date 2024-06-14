@@ -1,9 +1,9 @@
 body{
   font-family: 'Open Sans Condensed', sans-serif;
-  padding: 1vw 6vw;
-
 }
-
+.main-container{
+  padding: 1vw 6vw;
+}
 a{
   text-decoration: none;
   color: black;

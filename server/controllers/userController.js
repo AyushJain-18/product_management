@@ -8,16 +8,16 @@ let authenticateUser = async (req, res) => {
   let { userName, password } = req.body;
   try {
     let user = await Users.findOne({ username: userName });
-    console.log('ayush', password, user.password);
+    console.log('ayush', password, user?.password);
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    let isPasswordMatch = await verifyJWTToken(password, user.password);
+    let isPasswordMatch = await verifyJWTToken(password, user?.password);
     if (!isPasswordMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     let token = generateJWTToken(user);
-    res.status(200).json({ token });
+    res.status(200).json({ token, role: user.role });
   } catch (error) {
     console.log('Error', error);
     res.status(500).json({ message: error.message });

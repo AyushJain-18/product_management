@@ -19,19 +19,17 @@
             color: #4285f4
         }
     }
+    .wrongCredentials{
+        color: rgb(243, 98, 98);
+        font-size: larger;
+        font-weight: bold;
+    }
 
     .button-wrap{
             width: inherit;
             display: flex;
             flex-direction: column;
             align-content: space-between;
-           
-             //flex-direction: row;
-            //justify-content: space-between;
-            // align-content: flex-end;
-            // @media screen and (min-width: 600px) and (max-width: 992px){
-             
-            // }
   
     }
 }
