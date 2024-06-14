@@ -60,7 +60,7 @@ let viewProductForUser = async (req, res) => {
       },
       { assigned_users: 0 }
     );
-    res.status(200).json(products);
+    res.status(200).json({ products });
   } catch (error) {
     console.log('Error', error);
     res.status(500).json({ message: error.message });

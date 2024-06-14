@@ -79,8 +79,8 @@ let createUser = async (req, res) => {
 
 let getAllUsers = async (req, res) => {
   try {
-    let users = Users.find({ role: NON_ADMIN });
-    return res.send(200).json(users);
+    let users = await Users.find({ role: NON_ADMIN }, { username: 1, _id: 1 });
+    return res.status(200).json({ users: users });
   } catch (error) {
     console.log('Error occured', error);
     return res.status(500).json({ message: error.message });
