@@ -11,9 +11,12 @@ const {
   createDummyData,
 } = require('./controllers/dummyDataController');
 
+// 'mongodb://localhost:27017/product_management'
+let dbURL = `mongodb+srv://${process.env.DB_User}:${process.env.DB_Pass}@${process.env.DB_Cluster}.mongodb.net/${process.env.DB_Name}?retryWrites=true&w=majority`;
+
 let app = express();
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: process.env.CLIENT_URL,
 };
 app.use(cors(corsOptions));
 // Middleware
@@ -25,14 +28,17 @@ app.use('/images', express.static(imageFolderPath));
 
 // Database connection
 mongoose
-  .connect('mongodb://localhost:27017/product_management', {
+  .connect(dbURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(async () => {
-    console.log('Connected to MongoDB');
-    await deleteData();
-    await createDummyData();
+    console.log('Connected to MongoDB and environment is', process.env.NODE);
+
+    if (process.env.NODE !== 'production') {
+      await deleteData();
+      await createDummyData();
+    }
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB', err);
