@@ -59,7 +59,7 @@ const  CreateUser =()=>{
       
     })()
     
-  }, [])
+  }, [setIsLoading, token])
 
 
   return(

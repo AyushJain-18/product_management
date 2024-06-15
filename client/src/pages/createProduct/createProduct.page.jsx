@@ -48,18 +48,18 @@ const  CreateProductPage =()=>{
     event.preventDefault();
     setSuccess(null)
     const {name, price, category, description, assigned_users, _id} =productDetails;
-    let data = null;
     setIsLoading(true)
     try{
       if(loggedInUserRole === 'ADMIN' && location.pathname === '/create-product'){
-        data =  await createNewProductByAdmin(name, price, category, description,assigned_users, token);
+       await createNewProductByAdmin(name, price, category, description,assigned_users, token);
       }
       if(loggedInUserRole === 'ADMIN' && location.pathname === '/product/edit'){
-        data =  await modifyProduct(_id,token, name, price, category, description,assigned_users);
+          await modifyProduct(_id,token, name, price, category, description,assigned_users);
       }
       if(loggedInUserRole === 'USER') {
-        data = await createNewProductByUser(name, price, category, description,token);
+        await createNewProductByUser(name, price, category, description,token);
       }
+
       // setProductDetails(defaultProductDetails)
       setSuccess('Prodcut is created')
       setIsLoading(false)

@@ -47,31 +47,30 @@ const Homepage = () => {
       (selectedCategory === '' || product.category.toLocaleLowerCase() === selectedCategory.toLocaleLowerCase())
   );
 
-  const getProducts = async () => {
-    try {
-      let resp = [];
-      if (loggedInUserRole === 'ADMIN') {
-        resp = await getAllProduct(token);
-      }
-      if (loggedInUserRole === 'USER') {
-        resp = await getAllProductForUser(token);
-      }
-      if (resp?.products) {
-        let allCategory = [];
-         resp?.products.forEach((ele) => {
-          if(!allCategory.some(category => category.toLocaleLowerCase()=== ele.category.toLocaleLowerCase())){
-            allCategory.push(ele.category)
-          }
-        });
-         setCategory(allCategory);
-      }
-      //setProduct(products2);
-      setProduct(resp?.products);
-    } catch (error) {}
-  };
   useEffect(() => {
-    getProducts();
-  }, []);
+    (async () => {
+      try {
+        let resp = [];
+        if (loggedInUserRole === 'ADMIN') {
+          resp = await getAllProduct(token);
+        }
+        if (loggedInUserRole === 'USER') {
+          resp = await getAllProductForUser(token);
+        }
+        if (resp?.products) {
+          let allCategory = [];
+           resp?.products.forEach((ele) => {
+            if(!allCategory.some(category => category.toLocaleLowerCase()=== ele.category.toLocaleLowerCase())){
+              allCategory.push(ele.category)
+            }
+          });
+           setCategory(allCategory);
+        }
+        //setProduct(products2);
+        setProduct(resp?.products);
+      } catch (error) {}
+    })();
+  }, [loggedInUserRole, token]);
 
   return (
     <Box sx={{ flexGrow: 1, padding: 2 }}>
