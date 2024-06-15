@@ -1,4 +1,5 @@
-export const serverUrl = 'http://localhost:5000';
+export const serverUrl = 'https://product-management-451d.onrender.com';
+// export const serverUrl = 'http://localhost:5000';
 
 export const getImage = (imageName) => `${serverUrl}/images/${imageName}`;
 
