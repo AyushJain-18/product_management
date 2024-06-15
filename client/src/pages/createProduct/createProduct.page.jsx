@@ -108,7 +108,7 @@ const  CreateProductPage =()=>{
       
       }
     })()
-  }, [])
+  }, [loggedInUserRole, token, setIsLoading])
 
   useEffect(() => {
     let defaultProductDetails = productData? productData : {name: "", price: "", category: "",description:"", assigned_users:[] };
