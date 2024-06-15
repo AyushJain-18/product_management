@@ -6,10 +6,7 @@ const productRoutes = require('./routes/product_route');
 const userRoutes = require('./routes/user_route');
 const adminRoutes = require('./routes/admin_routes');
 const { checkAdminAuthMiddelware } = require('./middelware');
-const {
-  deleteData,
-  createDummyData,
-} = require('./controllers/dummyDataController');
+const { addData } = require('./controllers/dummyDataController');
 
 // 'mongodb://localhost:27017/product_management'
 let dbURL = `mongodb+srv://${process.env.DB_User}:${process.env.DB_Pass}@${process.env.DB_Cluster}.mongodb.net/${process.env.DB_Name}?retryWrites=true&w=majority`;
@@ -34,17 +31,13 @@ mongoose
   })
   .then(async () => {
     console.log('Connected to MongoDB and environment is', process.env.NODE);
-
-    if (process.env.NODE !== 'production') {
-      await deleteData();
-      await createDummyData();
-    }
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB', err);
   });
 
 // routes
+app.get('/addData', (req, res) => addData(req, res));
 app.get('/heartbeat', (req, res) => res.send('Server working'));
 app.use('/api/user', userRoutes);
 app.use('/api/product', checkAdminAuthMiddelware, productRoutes);

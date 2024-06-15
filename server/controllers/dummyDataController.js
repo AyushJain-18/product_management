@@ -9,6 +9,11 @@ let generateHashPassword = async (password) => {
   return hashPassword;
 };
 
+const addData = async (req, res) => {
+  await deleteData();
+  await createDummyData();
+  res.send('Data added');
+};
 const deleteData = async () => {
   try {
     await Products.deleteMany({});
@@ -147,4 +152,5 @@ const createDummyData = async () => {
 module.exports = {
   deleteData,
   createDummyData,
+  addData,
 };
